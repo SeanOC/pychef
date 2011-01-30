@@ -3,6 +3,7 @@ import datetime
 import itertools
 import logging
 import os
+import re
 import socket
 import threading
 import urllib2
@@ -74,6 +75,8 @@ class ChefAPI(object):
                 client_name = value
             elif key == 'client_key':
                 key_path = value
+                if '#{current_dir}' in key_path:
+                    key_path = re.sub(r'#{current_dir}', os.path.dirname(path), key_path)
         if not url:
             # No URL, no chance this was valid
             log.debug('No Chef server URL found')
